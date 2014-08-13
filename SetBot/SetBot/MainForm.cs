@@ -21,6 +21,8 @@ namespace SetBot
         public Size cardSize;
         public Size gapSize;
 
+        public Card[,] cardArray;
+
         public MainForm()
         {
             InitializeComponent();
@@ -51,7 +53,7 @@ namespace SetBot
         {
             bmp = new Bitmap(area.Width, area.Height);
             Graphics graphics = Graphics.FromImage(bmp);
-            graphics.CopyFromScreen(area.X, area.Y, 0, 0, area.Size);            
+            graphics.CopyFromScreen(area.X, area.Y, 0, 0, area.Size);
         }
 
         private void findCardsButton_Click(object sender, EventArgs e)
@@ -59,40 +61,6 @@ namespace SetBot
             int currentX, currentY;
 
             #region X axis
-
-            currentX = 0;
-            currentY = 50;
-
-            while (!isWhite(bmp.GetPixel(currentX, currentY)))
-            {
-                currentX++;
-            }
-
-            cardStart.X = currentX;
-
-            while (isWhite(bmp.GetPixel(currentX, currentY)))
-            {
-                currentY--;
-            }
-            currentY++;
-
-            while (isWhite(bmp.GetPixel(currentX, currentY)))
-            {
-                currentX++;
-            }
-
-            cardSize.Width = currentX - cardStart.X;
-
-            while (!isWhite(bmp.GetPixel(currentX, currentY)))
-            {
-                currentX++;
-            }
-
-            gapSize.Width = currentX - (cardStart.X + cardSize.Width);
-
-            #endregion
-
-            #region Y axis
 
             currentX = 50;
             currentY = 0;
@@ -102,39 +70,102 @@ namespace SetBot
                 currentY++;
             }
 
-            cardStart.Y = currentY;
-
             while (isWhite(bmp.GetPixel(currentX, currentY)))
             {
                 currentX--;
             }
             currentX++;
 
+            cardStart.X = currentX;
+
+            while (isWhite(bmp.GetPixel(currentX, currentY)))
+            {
+                currentX++;
+            }
+
+            cardSize.Width = (currentX - 1) - cardStart.X;
+
+            while (!isWhite(bmp.GetPixel(currentX, currentY)))
+            {
+                currentX++;
+            }
+
+            gapSize.Width = (currentX - 1) - (cardStart.X + cardSize.Width);
+
+            #endregion
+
+            #region Y axis
+
+            currentX = 0;
+            currentY = 50;
+
+            while (!isWhite(bmp.GetPixel(currentX, currentY)))
+            {
+                currentX++;
+            }
+
+            while (isWhite(bmp.GetPixel(currentX, currentY)))
+            {
+                currentY--;
+            }
+            currentY++;
+
+            cardStart.Y = currentY;
+
             while (isWhite(bmp.GetPixel(currentX, currentY)))
             {
                 currentY++;
             }
 
-            cardSize.Height = currentY - cardStart.Y;
+            cardSize.Height = (currentY - 1) - cardStart.Y;
 
             while (!isWhite(bmp.GetPixel(currentX, currentY)))
             {
                 currentY++;
             }
 
-            gapSize.Height = currentY - (cardStart.Y + cardSize.Height);
+            gapSize.Height = (currentY - 1) - (cardStart.Y + cardSize.Height);
 
             #endregion
-            MessageBox.Show("X:" + cardStart.X + "|Y:" + cardStart.Y);
-            MessageBox.Show("X:" + cardSize.Width + "|Y:" + cardSize.Height);
-            MessageBox.Show("X:" + gapSize.Width + "|Y:" + gapSize.Height);
+
+            //MessageBox.Show("X:" + cardStart.X + "|Y:" + cardStart.Y);
+            //MessageBox.Show("X:" + cardSize.Width + "|Y:" + cardSize.Height);
+            //MessageBox.Show("X:" + gapSize.Width + "|Y:" + gapSize.Height);
         }
 
         private void analyzeButton_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < 4 * 4; i++)
+            {
+                Point currentCardStart = new Point(
+                      cardStart.X + (cardSize.Width + gapSize.Width) * (i % 4),
+                      cardStart.Y + (cardSize.Height + gapSize.Height) * (i / 4)
+                      );
+
+                int currentX, currentY;
+                currentX = currentCardStart.X;
+                currentY = currentCardStart.Y;
+
+                while (isWhite(bmp.GetPixel(currentX, currentY)))
+                {
+                    currentX++;
+                    if (currentX - currentCardStart.X > cardSize.Width)
+                    {
+                        currentY++;
+                        currentX = currentCardStart.X;
+                    }
+                }
+
+                MessageBox.Show(bmp.GetPixel(currentX, currentY).ToString() + " : " +
+                    "X:" + (currentX - currentCardStart.X) + "| Y:" + (currentY - currentCardStart.Y));
+            }
+        }
+
+        private void drawCardBoundsButton_Click(object sender, EventArgs e)
+        {
             Graphics graphics = Graphics.FromImage(bmp);
 
-            for (int i = 0; i < 4*4; i++)
+            for (int i = 0; i < 4 * 4; i++)
             {
                 graphics.DrawRectangle(Pens.Black,
                     cardStart.X + (cardSize.Width + gapSize.Width) * (i % 4),
@@ -143,14 +174,24 @@ namespace SetBot
             }
         }
 
-        public bool isWhite(Color color)
-        {
-            return color.R > 200 && color.G > 200 && color.B > 200;
-        }
-
         private void saveImageButton_Click(object sender, EventArgs e)
         {
             bmp.Save(@"C:\Users\isti\Desktop\test.png", System.Drawing.Imaging.ImageFormat.Png);
+        }
+
+        public bool isWhite(Color color)
+        {
+            return color.R > 165 && color.G > 165 && color.B > 165;
+        }
+
+        public class Card
+        {
+            public enum CardCount { One = 1, Two = 2, Three = 3 };
+            public enum CardColor { Red, Green, Blue };
+            public enum CardType { Rectangle, Oval, Triangle };
+            public enum CardFill { Empty, Striped, Filled };
+
+            public CardColor cardColor;
         }
     }
 }
