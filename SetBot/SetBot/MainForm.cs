@@ -411,12 +411,12 @@ namespace SetBot
                     for (int k = j + 1; k < 4 * 4; k++)
                     {
                         if (isSET(
-                            cardArray[i%4, i/4],
-                            cardArray[j%4, j/4],
-                            cardArray[k%4, k/4]
+                            cardArray[i % 4, i / 4],
+                            cardArray[j % 4, j / 4],
+                            cardArray[k % 4, k / 4]
                             ))
                         {
-                            MessageBox.Show(i + " | " + j + " | " + k);
+                            MessageBox.Show(makeSETString(i, j, k));
                         }
                     }
                 }
@@ -451,12 +451,34 @@ namespace SetBot
                (cards[0].type != cards[1].type && cards[1].type != cards[2].type && cards[2].type != cards[0].type)
                );
 
-            //if (result)
-            //{
-            //    System.Diagnostics.Debugger.Break();
-            //}
-
             return result;
+        }
+
+        public string makeSETString(params int[] cards)
+        {
+            string output = "|";
+
+            for (int i = 0; i < 4 * 4; i++)
+            {
+                if (cards.Contains(i))
+                {
+                    output += "x|";
+                }
+
+                else
+                {
+                    output += " |";
+                }
+
+                if (i % 4 == 3)
+                {
+                    output += System.Environment.NewLine + "|";
+                }
+            }
+
+            output.Substring(0, output.Length - 2);
+
+            return output;
         }
     }
 }
