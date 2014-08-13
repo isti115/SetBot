@@ -36,6 +36,7 @@
             this.saveImageButton = new System.Windows.Forms.Button();
             this.drawCardBoundsButton = new System.Windows.Forms.Button();
             this.outputButton = new System.Windows.Forms.Button();
+            this.findSetButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // setAreaButton
@@ -120,11 +121,22 @@
             this.outputButton.UseVisualStyleBackColor = true;
             this.outputButton.Click += new System.EventHandler(this.outputButton_Click);
             // 
+            // findSetButton
+            // 
+            this.findSetButton.Location = new System.Drawing.Point(266, 57);
+            this.findSetButton.Name = "findSetButton";
+            this.findSetButton.Size = new System.Drawing.Size(75, 23);
+            this.findSetButton.TabIndex = 8;
+            this.findSetButton.Text = "Find Set";
+            this.findSetButton.UseVisualStyleBackColor = true;
+            this.findSetButton.Click += new System.EventHandler(this.findSetButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(353, 307);
+            this.Controls.Add(this.findSetButton);
             this.Controls.Add(this.outputButton);
             this.Controls.Add(this.drawCardBoundsButton);
             this.Controls.Add(this.saveImageButton);
@@ -150,6 +162,7 @@
         private System.Windows.Forms.Button saveImageButton;
         private System.Windows.Forms.Button drawCardBoundsButton;
         private System.Windows.Forms.Button outputButton;
+        private System.Windows.Forms.Button findSetButton;
     }
 }
 

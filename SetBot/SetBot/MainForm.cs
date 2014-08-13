@@ -399,5 +399,64 @@ namespace SetBot
         public enum CardColor { Red, Green, Blue };
         public enum CardType { Rectangle, Oval, Triangle };
         public enum CardFill { Empty, Striped, Filled };
+
+        // Here comes the part with SETs
+
+        private void findSetButton_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 4 * 4; i++)
+            {
+                for (int j = i + 1; j < 4 * 4; j++)
+                {
+                    for (int k = j + 1; k < 4 * 4; k++)
+                    {
+                        if (isSET(
+                            cardArray[i%4, i/4],
+                            cardArray[j%4, j/4],
+                            cardArray[k%4, k/4]
+                            ))
+                        {
+                            MessageBox.Show(i + " | " + j + " | " + k);
+                        }
+                    }
+                }
+            }
+        }
+
+        public bool isSET(params Card[] cards)
+        {
+            bool result = true;
+
+            result = result && (
+               (cards[0].count == cards[1].count && cards[1].count == cards[2].count && cards[2].count == cards[0].count)
+               ||
+               (cards[0].count != cards[1].count && cards[1].count != cards[2].count && cards[2].count != cards[0].count)
+               );
+
+            result = result && (
+               (cards[0].color == cards[1].color && cards[1].color == cards[2].color && cards[2].color == cards[0].color)
+               ||
+               (cards[0].color != cards[1].color && cards[1].color != cards[2].color && cards[2].color != cards[0].color)
+               );
+
+            result = result && (
+               (cards[0].fill == cards[1].fill && cards[1].fill == cards[2].fill && cards[2].fill == cards[0].fill)
+               ||
+               (cards[0].fill != cards[1].fill && cards[1].fill != cards[2].fill && cards[2].fill != cards[0].fill)
+               );
+
+            result = result && (
+               (cards[0].type == cards[1].type && cards[1].type == cards[2].type && cards[2].type == cards[0].type)
+               ||
+               (cards[0].type != cards[1].type && cards[1].type != cards[2].type && cards[2].type != cards[0].type)
+               );
+
+            //if (result)
+            //{
+            //    System.Diagnostics.Debugger.Break();
+            //}
+
+            return result;
+        }
     }
 }
