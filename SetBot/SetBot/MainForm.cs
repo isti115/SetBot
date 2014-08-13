@@ -23,6 +23,8 @@ namespace SetBot
 
         public Card[,] cardArray;
 
+        public List<string> SETs = new List<string>();
+
         public MainForm()
         {
             InitializeComponent();
@@ -404,6 +406,8 @@ namespace SetBot
 
         private void findSetButton_Click(object sender, EventArgs e)
         {
+            SETs.Clear();
+
             for (int i = 0; i < 4 * 4; i++)
             {
                 for (int j = i + 1; j < 4 * 4; j++)
@@ -416,7 +420,8 @@ namespace SetBot
                             cardArray[k % 4, k / 4]
                             ))
                         {
-                            MessageBox.Show(makeSETString(i, j, k));
+                            //MessageBox.Show(makeSETString(i, j, k));
+                            SETs.Add(makeSETString(i, j, k));
                         }
                     }
                 }
@@ -476,9 +481,14 @@ namespace SetBot
                 }
             }
 
-            output.Substring(0, output.Length - 2);
+            output = output.Substring(0, output.Length - 2);
 
             return output;
+        }
+
+        private void outputLabel_Click(object sender, EventArgs e)
+        {
+            outputLabel.Text = SETs[(SETs.IndexOf(outputLabel.Text) + 1) % SETs.Count];
         }
     }
 }

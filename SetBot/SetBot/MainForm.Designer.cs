@@ -62,15 +62,18 @@
             // outputLabel
             // 
             this.outputLabel.AutoSize = true;
-            this.outputLabel.Location = new System.Drawing.Point(13, 57);
+            this.outputLabel.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.outputLabel.Location = new System.Drawing.Point(109, 48);
             this.outputLabel.Name = "outputLabel";
-            this.outputLabel.Size = new System.Drawing.Size(37, 13);
+            this.outputLabel.Size = new System.Drawing.Size(63, 19);
             this.outputLabel.TabIndex = 4;
             this.outputLabel.Text = "output";
+            this.outputLabel.Click += new System.EventHandler(this.outputLabel_Click);
             // 
             // analyzeButton
             // 
-            this.analyzeButton.Location = new System.Drawing.Point(266, 13);
+            this.analyzeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.analyzeButton.Location = new System.Drawing.Point(315, 12);
             this.analyzeButton.Name = "analyzeButton";
             this.analyzeButton.Size = new System.Drawing.Size(75, 23);
             this.analyzeButton.TabIndex = 3;
@@ -80,7 +83,8 @@
             // 
             // findCardsButton
             // 
-            this.findCardsButton.Location = new System.Drawing.Point(176, 13);
+            this.findCardsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.findCardsButton.Location = new System.Drawing.Point(234, 12);
             this.findCardsButton.Name = "findCardsButton";
             this.findCardsButton.Size = new System.Drawing.Size(75, 23);
             this.findCardsButton.TabIndex = 2;
@@ -91,7 +95,7 @@
             // saveImageButton
             // 
             this.saveImageButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveImageButton.Location = new System.Drawing.Point(266, 272);
+            this.saveImageButton.Location = new System.Drawing.Point(313, 151);
             this.saveImageButton.Name = "saveImageButton";
             this.saveImageButton.Size = new System.Drawing.Size(75, 23);
             this.saveImageButton.TabIndex = 5;
@@ -102,7 +106,7 @@
             // drawCardBoundsButton
             // 
             this.drawCardBoundsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.drawCardBoundsButton.Location = new System.Drawing.Point(140, 272);
+            this.drawCardBoundsButton.Location = new System.Drawing.Point(196, 151);
             this.drawCardBoundsButton.Name = "drawCardBoundsButton";
             this.drawCardBoundsButton.Size = new System.Drawing.Size(111, 23);
             this.drawCardBoundsButton.TabIndex = 6;
@@ -113,7 +117,7 @@
             // outputButton
             // 
             this.outputButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.outputButton.Location = new System.Drawing.Point(16, 272);
+            this.outputButton.Location = new System.Drawing.Point(16, 151);
             this.outputButton.Name = "outputButton";
             this.outputButton.Size = new System.Drawing.Size(75, 23);
             this.outputButton.TabIndex = 7;
@@ -123,7 +127,8 @@
             // 
             // findSetButton
             // 
-            this.findSetButton.Location = new System.Drawing.Point(266, 57);
+            this.findSetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.findSetButton.Location = new System.Drawing.Point(97, 151);
             this.findSetButton.Name = "findSetButton";
             this.findSetButton.Size = new System.Drawing.Size(75, 23);
             this.findSetButton.TabIndex = 8;
@@ -135,7 +140,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(353, 307);
+            this.ClientSize = new System.Drawing.Size(400, 186);
             this.Controls.Add(this.findSetButton);
             this.Controls.Add(this.outputButton);
             this.Controls.Add(this.drawCardBoundsButton);
