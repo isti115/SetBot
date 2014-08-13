@@ -135,6 +135,8 @@ namespace SetBot
 
         private void analyzeButton_Click(object sender, EventArgs e)
         {
+            string output = "";
+
             for (int i = 0; i < 4 * 4; i++)
             {
                 Point currentCardStart = new Point(
@@ -156,9 +158,17 @@ namespace SetBot
                     }
                 }
 
-                MessageBox.Show(bmp.GetPixel(currentX, currentY).ToString() + " : " +
-                    "X:" + (currentX - currentCardStart.X) + "| Y:" + (currentY - currentCardStart.Y));
+                //MessageBox.Show(bmp.GetPixel(currentX, currentY).ToString() + " : " +
+                //    "X:" + (currentX - currentCardStart.X) + "| Y:" + (currentY - currentCardStart.Y));
+
+                output += "|" + getCardColor(bmp.GetPixel(currentX, currentY));
+                if (i % 4 == 3)
+                {
+                    output += System.Environment.NewLine;
+                }
             }
+
+            outputLabel.Text = output;
         }
 
         private void drawCardBoundsButton_Click(object sender, EventArgs e)
@@ -184,12 +194,44 @@ namespace SetBot
             return color.R > 165 && color.G > 165 && color.B > 165;
         }
 
-        public class Card
+        public CardColor getCardColor(Color color)
         {
+            if (color.R > color.G && color.R > color.B)
+            {
+                return CardColor.Red;
+            }
+
+            else if (color.G > color.R && color.G > color.B)
+            {
+                return CardColor.Green;
+            }
+
+            else if (color.B > color.R && color.B > color.G)
+            {
+                return CardColor.Blue;
+            }
+
+            else
+            {
+                throw new ColorNotRecognizedException();
+            }
+        }
+
+        public class ColorNotRecognizedException : Exception
+        {
+            public ColorNotRecognizedException()
+            {
+            }
+        }
+
             public enum CardCount { One = 1, Two = 2, Three = 3 };
             public enum CardColor { Red, Green, Blue };
             public enum CardType { Rectangle, Oval, Triangle };
             public enum CardFill { Empty, Striped, Filled };
+
+        public class Card
+        {
+            
 
             public CardColor cardColor;
         }

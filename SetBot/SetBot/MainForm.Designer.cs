@@ -99,6 +99,7 @@
             // 
             // drawCardBoundsButton
             // 
+            this.drawCardBoundsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.drawCardBoundsButton.Location = new System.Drawing.Point(140, 272);
             this.drawCardBoundsButton.Name = "drawCardBoundsButton";
             this.drawCardBoundsButton.Size = new System.Drawing.Size(111, 23);
