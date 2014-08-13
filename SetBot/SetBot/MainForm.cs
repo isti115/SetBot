@@ -146,6 +146,8 @@ namespace SetBot
                 currentX = currentCardStart.X;
                 currentY = currentCardStart.Y;
 
+                int center, topWidth, bottomWidth;
+
                 #region color
 
                 while (isWhite(bmp.GetPixel(currentX, currentY)))
@@ -175,13 +177,14 @@ namespace SetBot
 
                 #endregion
 
-                int center = currentX;
+                center = currentX;
 
                 while (!isWhite(bmp.GetPixel(currentX, currentY)))
                 {
                     currentX++;
                 }
 
+                topWidth = currentX - center;
                 center = (center + currentX) / 2;
 
                 #region count
@@ -212,6 +215,8 @@ namespace SetBot
                 currentX = center;
                 count = 0;
 
+                int bottomY = -1;
+
                 while (currentY - currentCardStart.Y < cardSize.Height)
                 {
                     if (!isWhite(bmp.GetPixel(currentX, currentY)))
@@ -221,6 +226,7 @@ namespace SetBot
                             currentY++;
                         }
 
+                        bottomY = currentY - 2;
                         count++;
                     }
 
@@ -228,6 +234,30 @@ namespace SetBot
                 }
 
                 currentCard.fill = getCardFill(count);
+
+                #endregion
+
+                #region type
+
+                currentY = bottomY;
+
+                while (!isWhite(bmp.GetPixel(currentX, currentY)))
+                {
+                    currentX--;
+                }
+                currentX++;
+
+                bottomWidth = currentX;
+
+                while (!isWhite(bmp.GetPixel(currentX, currentY)))
+                {
+                    currentX++;
+                }
+                currentX--;
+
+                bottomWidth = currentX - bottomWidth;
+
+                currentCard.type = getCardType(topWidth, bottomWidth);
 
                 #endregion
 
@@ -325,6 +355,33 @@ namespace SetBot
 
         public class FillNotRecognisedException : Exception { }
 
+        public CardType getCardType(int topWidth, int bottomWidth)
+        {
+            int separator = 35;
+
+            if (topWidth < separator && bottomWidth < separator)
+            {
+                return CardType.Oval;
+            }
+
+            else if (topWidth < separator && bottomWidth > separator)
+            {
+                return CardType.Triangle;
+            }
+
+            else if (topWidth > separator && bottomWidth > separator)
+            {
+                return CardType.Rectangle;
+            }
+
+            else
+            {
+                throw new TypeNotRecognisedException();
+            }
+        }
+
+        public class TypeNotRecognisedException : Exception { }
+
         public class Card
         {
             public CardCount count;
@@ -334,7 +391,7 @@ namespace SetBot
 
             public override string ToString()
             {
-                return ((int)count).ToString() + color.ToString()[0] + /*type.ToString()[0] +*/ fill.ToString()[0];
+                return ((int)count).ToString() + color.ToString()[0] + type.ToString()[0] + fill.ToString()[0];
             }
         }
 
