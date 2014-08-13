@@ -35,6 +35,7 @@
             this.findCardsButton = new System.Windows.Forms.Button();
             this.saveImageButton = new System.Windows.Forms.Button();
             this.drawCardBoundsButton = new System.Windows.Forms.Button();
+            this.outputButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // setAreaButton
@@ -108,11 +109,23 @@
             this.drawCardBoundsButton.UseVisualStyleBackColor = true;
             this.drawCardBoundsButton.Click += new System.EventHandler(this.drawCardBoundsButton_Click);
             // 
+            // outputButton
+            // 
+            this.outputButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.outputButton.Location = new System.Drawing.Point(16, 272);
+            this.outputButton.Name = "outputButton";
+            this.outputButton.Size = new System.Drawing.Size(75, 23);
+            this.outputButton.TabIndex = 7;
+            this.outputButton.Text = "Output";
+            this.outputButton.UseVisualStyleBackColor = true;
+            this.outputButton.Click += new System.EventHandler(this.outputButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(353, 307);
+            this.Controls.Add(this.outputButton);
             this.Controls.Add(this.drawCardBoundsButton);
             this.Controls.Add(this.saveImageButton);
             this.Controls.Add(this.findCardsButton);
@@ -136,6 +149,7 @@
         private System.Windows.Forms.Button findCardsButton;
         private System.Windows.Forms.Button saveImageButton;
         private System.Windows.Forms.Button drawCardBoundsButton;
+        private System.Windows.Forms.Button outputButton;
     }
 }
 

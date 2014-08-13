@@ -127,18 +127,16 @@ namespace SetBot
             gapSize.Height = (currentY - 1) - (cardStart.Y + cardSize.Height);
 
             #endregion
-
-            //MessageBox.Show("X:" + cardStart.X + "|Y:" + cardStart.Y);
-            //MessageBox.Show("X:" + cardSize.Width + "|Y:" + cardSize.Height);
-            //MessageBox.Show("X:" + gapSize.Width + "|Y:" + gapSize.Height);
         }
 
         private void analyzeButton_Click(object sender, EventArgs e)
         {
-            string output = "";
+            cardArray = new Card[4, 4];
 
             for (int i = 0; i < 4 * 4; i++)
             {
+                Card currentCard = new Card();
+
                 Point currentCardStart = new Point(
                       cardStart.X + (cardSize.Width + gapSize.Width) * (i % 4),
                       cardStart.Y + (cardSize.Height + gapSize.Height) * (i / 4)
@@ -147,6 +145,8 @@ namespace SetBot
                 int currentX, currentY;
                 currentX = currentCardStart.X;
                 currentY = currentCardStart.Y;
+
+                #region color
 
                 while (isWhite(bmp.GetPixel(currentX, currentY)))
                 {
@@ -158,10 +158,90 @@ namespace SetBot
                     }
                 }
 
-                //MessageBox.Show(bmp.GetPixel(currentX, currentY).ToString() + " : " +
-                //    "X:" + (currentX - currentCardStart.X) + "| Y:" + (currentY - currentCardStart.Y));
+                currentY++;
+                currentX = currentCardStart.X;
 
-                output += "|" + getCardColor(bmp.GetPixel(currentX, currentY));
+                while (isWhite(bmp.GetPixel(currentX, currentY)))
+                {
+                    currentX++;
+                    if (currentX - currentCardStart.X > cardSize.Width)
+                    {
+                        currentY++;
+                        currentX = currentCardStart.X;
+                    }
+                }
+
+                currentCard.color = getCardColor(bmp.GetPixel(currentX, currentY));
+
+                #endregion
+
+                int center = currentX;
+
+                while (!isWhite(bmp.GetPixel(currentX, currentY)))
+                {
+                    currentX++;
+                }
+
+                center = (center + currentX) / 2;
+
+                #region count
+
+                int count = 1;
+
+                while (currentX - currentCardStart.X < cardSize.Width)
+                {
+                    if (!isWhite(bmp.GetPixel(currentX, currentY)))
+                    {
+                        while (!isWhite(bmp.GetPixel(currentX, currentY)))
+                        {
+                            currentX++;
+                        }
+
+                        count++;
+                    }
+
+                    currentX++;
+                }
+
+                currentCard.count = (CardCount)count;
+
+                #endregion
+
+                #region fill
+
+                currentX = center;
+                count = 0;
+
+                while (currentY - currentCardStart.Y < cardSize.Height)
+                {
+                    if (!isWhite(bmp.GetPixel(currentX, currentY)))
+                    {
+                        while (!isWhite(bmp.GetPixel(currentX, currentY)))
+                        {
+                            currentY++;
+                        }
+
+                        count++;
+                    }
+
+                    currentY++;
+                }
+
+                currentCard.fill = getCardFill(count);
+
+                #endregion
+
+                cardArray[i % 4, i / 4] = currentCard;
+            }
+        }
+
+        private void outputButton_Click(object sender, EventArgs e)
+        {
+            string output = "";
+
+            for (int i = 0; i < 4 * 4; i++)
+            {
+                output += cardArray[i % 4, i / 4].ToString() + "|";
                 if (i % 4 == 3)
                 {
                     output += System.Environment.NewLine;
@@ -191,7 +271,8 @@ namespace SetBot
 
         public bool isWhite(Color color)
         {
-            return color.R > 165 && color.G > 165 && color.B > 165;
+            int whiteTreshold = 165;
+            return color.R > whiteTreshold && color.G > whiteTreshold && color.B > whiteTreshold;
         }
 
         public CardColor getCardColor(Color color)
@@ -217,23 +298,49 @@ namespace SetBot
             }
         }
 
-        public class ColorNotRecognizedException : Exception
+        public class ColorNotRecognizedException : Exception { }
+
+        public CardFill getCardFill(int count)
         {
-            public ColorNotRecognizedException()
+            if (count == 1)
             {
+                return CardFill.Filled;
+            }
+
+            else if (count == 2)
+            {
+                return CardFill.Empty;
+            }
+
+            else if (count > 2)
+            {
+                return CardFill.Striped;
+            }
+
+            else
+            {
+                throw new FillNotRecognisedException();
             }
         }
 
-            public enum CardCount { One = 1, Two = 2, Three = 3 };
-            public enum CardColor { Red, Green, Blue };
-            public enum CardType { Rectangle, Oval, Triangle };
-            public enum CardFill { Empty, Striped, Filled };
+        public class FillNotRecognisedException : Exception { }
 
         public class Card
         {
-            
+            public CardCount count;
+            public CardColor color;
+            public CardType type;
+            public CardFill fill;
 
-            public CardColor cardColor;
+            public override string ToString()
+            {
+                return ((int)count).ToString() + color.ToString()[0] + /*type.ToString()[0] +*/ fill.ToString()[0];
+            }
         }
+
+        public enum CardCount { One = 1, Two = 2, Three = 3 };
+        public enum CardColor { Red, Green, Blue };
+        public enum CardType { Rectangle, Oval, Triangle };
+        public enum CardFill { Empty, Striped, Filled };
     }
 }
