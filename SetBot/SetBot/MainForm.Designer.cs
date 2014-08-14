@@ -39,6 +39,7 @@
             this.findSetButton = new System.Windows.Forms.Button();
             this.CFAFOButton = new System.Windows.Forms.Button();
             this.takeSetButton = new System.Windows.Forms.Button();
+            this.automaticCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // setAreaButton
@@ -158,11 +159,22 @@
             this.takeSetButton.UseVisualStyleBackColor = true;
             this.takeSetButton.Click += new System.EventHandler(this.takeSetButton_Click);
             // 
+            // automaticCheckBox
+            // 
+            this.automaticCheckBox.AutoSize = true;
+            this.automaticCheckBox.Location = new System.Drawing.Point(277, 128);
+            this.automaticCheckBox.Name = "automaticCheckBox";
+            this.automaticCheckBox.Size = new System.Drawing.Size(73, 17);
+            this.automaticCheckBox.TabIndex = 11;
+            this.automaticCheckBox.Text = "Automatic";
+            this.automaticCheckBox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(400, 186);
+            this.Controls.Add(this.automaticCheckBox);
             this.Controls.Add(this.takeSetButton);
             this.Controls.Add(this.CFAFOButton);
             this.Controls.Add(this.findSetButton);
@@ -176,6 +188,7 @@
             this.Controls.Add(this.setAreaButton);
             this.Name = "MainForm";
             this.Text = "SetBot";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -194,6 +207,7 @@
         private System.Windows.Forms.Button findSetButton;
         private System.Windows.Forms.Button CFAFOButton;
         private System.Windows.Forms.Button takeSetButton;
+        private System.Windows.Forms.CheckBox automaticCheckBox;
     }
 }
 

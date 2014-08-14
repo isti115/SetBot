@@ -23,6 +23,8 @@ namespace SetBot
         public Size cardSize;
         public Size gapSize;
 
+        public bool cardsMeasured;
+
         public Card[,] cardArray;
 
         public List<int[]> SETs = new List<int[]>();
@@ -31,6 +33,11 @@ namespace SetBot
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            cardsMeasured = false;
         }
 
         private void setAreaButton_Click(object sender, EventArgs e)
@@ -63,6 +70,11 @@ namespace SetBot
 
         private void findCardsButton_Click(object sender, EventArgs e)
         {
+            if (cardsMeasured)
+            {
+                return;
+            }
+
             int currentX, currentY;
 
             #region X axis
@@ -132,6 +144,8 @@ namespace SetBot
             gapSize.Height = (currentY - 1) - (cardStart.Y + cardSize.Height);
 
             #endregion
+
+            cardsMeasured = true;
         }
 
         private void analyzeButton_Click(object sender, EventArgs e)
@@ -501,15 +515,30 @@ namespace SetBot
 
         private void CFAFOButton_Click(object sender, EventArgs e)
         {
-            captureButton_Click(sender, e);
-            findCardsButton_Click(sender, e);
-            analyzeButton_Click(sender, e);
-            findSetButton_Click(sender, e);
-            outputLabel_Click(sender, e);
+            do
+            {
+                captureButton_Click(sender, e);
+                findCardsButton_Click(sender, e);
+                analyzeButton_Click(sender, e);
+                findSetButton_Click(sender, e);
+
+                if (SETs.Count == 0)
+                {
+                    automaticCheckBox.Checked = false;
+                    return;
+                }
+
+                outputLabel_Click(sender, e);
+                takeSetButton_Click(sender, e);
+
+                new System.Threading.ManualResetEvent(false).WaitOne(150);
+            } while (automaticCheckBox.Checked);
         }
 
         private void takeSetButton_Click(object sender, EventArgs e)
         {
+            Point startPosition = Cursor.Position;
+
             for (int i = 0; i < 3; i++)
             {
                 mouseClick(
@@ -519,6 +548,8 @@ namespace SetBot
 
                 System.Threading.Thread.Sleep(100);
             }
+
+            Cursor.Position = startPosition;
         }
 
         // copy-pasted mouse click
