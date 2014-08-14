@@ -37,6 +37,8 @@
             this.drawCardBoundsButton = new System.Windows.Forms.Button();
             this.outputButton = new System.Windows.Forms.Button();
             this.findSetButton = new System.Windows.Forms.Button();
+            this.CFAFOButton = new System.Windows.Forms.Button();
+            this.takeSetButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // setAreaButton
@@ -63,7 +65,7 @@
             // 
             this.outputLabel.AutoSize = true;
             this.outputLabel.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.outputLabel.Location = new System.Drawing.Point(109, 48);
+            this.outputLabel.Location = new System.Drawing.Point(192, 42);
             this.outputLabel.Name = "outputLabel";
             this.outputLabel.Size = new System.Drawing.Size(63, 19);
             this.outputLabel.TabIndex = 4;
@@ -136,11 +138,33 @@
             this.findSetButton.UseVisualStyleBackColor = true;
             this.findSetButton.Click += new System.EventHandler(this.findSetButton_Click);
             // 
+            // CFAFOButton
+            // 
+            this.CFAFOButton.Location = new System.Drawing.Point(16, 42);
+            this.CFAFOButton.Name = "CFAFOButton";
+            this.CFAFOButton.Size = new System.Drawing.Size(153, 103);
+            this.CFAFOButton.TabIndex = 9;
+            this.CFAFOButton.Text = "CFAFO";
+            this.CFAFOButton.UseVisualStyleBackColor = true;
+            this.CFAFOButton.Click += new System.EventHandler(this.CFAFOButton_Click);
+            // 
+            // takeSetButton
+            // 
+            this.takeSetButton.Location = new System.Drawing.Point(196, 121);
+            this.takeSetButton.Name = "takeSetButton";
+            this.takeSetButton.Size = new System.Drawing.Size(75, 23);
+            this.takeSetButton.TabIndex = 10;
+            this.takeSetButton.Text = "Take Set";
+            this.takeSetButton.UseVisualStyleBackColor = true;
+            this.takeSetButton.Click += new System.EventHandler(this.takeSetButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(400, 186);
+            this.Controls.Add(this.takeSetButton);
+            this.Controls.Add(this.CFAFOButton);
             this.Controls.Add(this.findSetButton);
             this.Controls.Add(this.outputButton);
             this.Controls.Add(this.drawCardBoundsButton);
@@ -168,6 +192,8 @@
         private System.Windows.Forms.Button drawCardBoundsButton;
         private System.Windows.Forms.Button outputButton;
         private System.Windows.Forms.Button findSetButton;
+        private System.Windows.Forms.Button CFAFOButton;
+        private System.Windows.Forms.Button takeSetButton;
     }
 }
 

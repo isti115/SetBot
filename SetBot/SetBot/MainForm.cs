@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.Runtime.InteropServices;
+
 namespace SetBot
 {
     public partial class MainForm : Form
@@ -23,7 +25,8 @@ namespace SetBot
 
         public Card[,] cardArray;
 
-        public List<string> SETs = new List<string>();
+        public List<int[]> SETs = new List<int[]>();
+        public List<string> SETStrings = new List<string>();
 
         public MainForm()
         {
@@ -148,120 +151,121 @@ namespace SetBot
                 currentX = currentCardStart.X;
                 currentY = currentCardStart.Y;
 
-                int center, topWidth, bottomWidth;
-
-                #region color
-
-                while (isWhite(bmp.GetPixel(currentX, currentY)))
+                if (isWhite(bmp.GetPixel(currentX, currentY)))
                 {
-                    currentX++;
-                    if (currentX - currentCardStart.X > cardSize.Width)
+                    int center, topWidth, bottomWidth;
+
+                    #region color
+
+                    for (int j = 0; j < 3; j++)
                     {
-                        currentY++;
                         currentX = currentCardStart.X;
-                    }
-                }
-
-                currentY++;
-                currentX = currentCardStart.X;
-
-                while (isWhite(bmp.GetPixel(currentX, currentY)))
-                {
-                    currentX++;
-                    if (currentX - currentCardStart.X > cardSize.Width)
-                    {
                         currentY++;
-                        currentX = currentCardStart.X;
-                    }
-                }
 
-                currentCard.color = getCardColor(bmp.GetPixel(currentX, currentY));
-
-                #endregion
-
-                center = currentX;
-
-                while (!isWhite(bmp.GetPixel(currentX, currentY)))
-                {
-                    currentX++;
-                }
-
-                topWidth = currentX - center;
-                center = (center + currentX) / 2;
-
-                #region count
-
-                int count = 1;
-
-                while (currentX - currentCardStart.X < cardSize.Width)
-                {
-                    if (!isWhite(bmp.GetPixel(currentX, currentY)))
-                    {
-                        while (!isWhite(bmp.GetPixel(currentX, currentY)))
+                        while (isWhite(bmp.GetPixel(currentX, currentY)))
                         {
                             currentX++;
+                            if (currentX - currentCardStart.X > cardSize.Width)
+                            {
+                                currentX = currentCardStart.X;
+                                currentY++;
+                            }
                         }
-
-                        count++;
                     }
 
-                    currentX++;
-                }
+                    currentCard.color = getCardColor(bmp.GetPixel(currentX, currentY));
 
-                currentCard.count = (CardCount)count;
+                    #endregion
 
-                #endregion
+                    center = currentX;
 
-                #region fill
-
-                currentX = center;
-                count = 0;
-
-                int bottomY = -1;
-
-                while (currentY - currentCardStart.Y < cardSize.Height)
-                {
-                    if (!isWhite(bmp.GetPixel(currentX, currentY)))
+                    while (!isWhite(bmp.GetPixel(currentX, currentY)))
                     {
-                        while (!isWhite(bmp.GetPixel(currentX, currentY)))
-                        {
-                            currentY++;
-                        }
-
-                        bottomY = currentY - 2;
-                        count++;
+                        currentX++;
                     }
 
-                    currentY++;
-                }
+                    topWidth = currentX - center;
+                    center = (center + currentX) / 2;
 
-                currentCard.fill = getCardFill(count);
+                    #region count
 
-                #endregion
+                    int count = 1;
 
-                #region type
+                    while (currentX - currentCardStart.X < cardSize.Width)
+                    {
+                        if (!isWhite(bmp.GetPixel(currentX, currentY)))
+                        {
+                            while (!isWhite(bmp.GetPixel(currentX, currentY)))
+                            {
+                                currentX++;
+                            }
 
-                currentY = bottomY;
+                            count++;
+                        }
 
-                while (!isWhite(bmp.GetPixel(currentX, currentY)))
-                {
-                    currentX--;
-                }
-                currentX++;
+                        currentX++;
+                    }
 
-                bottomWidth = currentX;
+                    currentCard.count = (CardCount)count;
 
-                while (!isWhite(bmp.GetPixel(currentX, currentY)))
-                {
+                    #endregion
+
+                    #region fill
+
+                    currentX = center;
+                    count = 0;
+
+                    int bottomY = -1;
+
+                    while (currentY - currentCardStart.Y < cardSize.Height)
+                    {
+                        if (!isWhite(bmp.GetPixel(currentX, currentY)))
+                        {
+                            while (!isWhite(bmp.GetPixel(currentX, currentY)))
+                            {
+                                currentY++;
+                            }
+
+                            bottomY = currentY - 2;
+                            count++;
+                        }
+
+                        currentY++;
+                    }
+
+                    currentCard.fill = getCardFill(count);
+
+                    #endregion
+
+                    #region type
+
+                    currentY = bottomY;
+
+                    while (!isWhite(bmp.GetPixel(currentX, currentY)))
+                    {
+                        currentX--;
+                    }
                     currentX++;
+
+                    bottomWidth = currentX;
+
+                    while (!isWhite(bmp.GetPixel(currentX, currentY)))
+                    {
+                        currentX++;
+                    }
+                    currentX--;
+
+                    bottomWidth = currentX - bottomWidth;
+
+                    currentCard.type = getCardType(topWidth, bottomWidth);
+
+                    #endregion
                 }
-                currentX--;
 
-                bottomWidth = currentX - bottomWidth;
-
-                currentCard.type = getCardType(topWidth, bottomWidth);
-
-                #endregion
+                else
+                {
+                    currentCard = null;
+                }
 
                 cardArray[i % 4, i / 4] = currentCard;
             }
@@ -407,6 +411,7 @@ namespace SetBot
         private void findSetButton_Click(object sender, EventArgs e)
         {
             SETs.Clear();
+            SETStrings.Clear();
 
             for (int i = 0; i < 4 * 4; i++)
             {
@@ -421,7 +426,8 @@ namespace SetBot
                             ))
                         {
                             //MessageBox.Show(makeSETString(i, j, k));
-                            SETs.Add(makeSETString(i, j, k));
+                            SETs.Add(new int[] { i, j, k });
+                            SETStrings.Add(makeSETString(i, j, k));
                         }
                     }
                 }
@@ -431,6 +437,8 @@ namespace SetBot
         public bool isSET(params Card[] cards)
         {
             bool result = true;
+
+            result = result && cards[0] != null && cards[1] != null && cards[2] != null;
 
             result = result && (
                (cards[0].count == cards[1].count && cards[1].count == cards[2].count && cards[2].count == cards[0].count)
@@ -488,7 +496,39 @@ namespace SetBot
 
         private void outputLabel_Click(object sender, EventArgs e)
         {
-            outputLabel.Text = SETs[(SETs.IndexOf(outputLabel.Text) + 1) % SETs.Count];
+            outputLabel.Text = SETStrings[(SETStrings.IndexOf(outputLabel.Text) + 1) % SETStrings.Count];
+        }
+
+        private void CFAFOButton_Click(object sender, EventArgs e)
+        {
+            captureButton_Click(sender, e);
+            findCardsButton_Click(sender, e);
+            analyzeButton_Click(sender, e);
+            findSetButton_Click(sender, e);
+            outputLabel_Click(sender, e);
+        }
+
+        private void takeSetButton_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                mouseClick(
+                    area.X + cardStart.X + (cardSize.Width + gapSize.Width) * (SETs[0][i] % 4) + (cardSize.Width / 2),
+                    area.Y + cardStart.Y + (cardSize.Height + gapSize.Height) * (SETs[0][i] / 4) + (cardSize.Height / 2)
+                    );
+
+                System.Threading.Thread.Sleep(100);
+            }
+        }
+
+        // copy-pasted mouse click
+        [DllImport("user32.dll")]
+        private static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint dwData, uint dwExtraInf);
+        public void mouseClick(int x, int y)
+        {
+            Cursor.Position = new Point(x, y);
+            mouse_event(0x0002, 0, 0, 0, 0);//make left button down
+            mouse_event(0x0004, 0, 0, 0, 0);//make left button up
         }
     }
 }
